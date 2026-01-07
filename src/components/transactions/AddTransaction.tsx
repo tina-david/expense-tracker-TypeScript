@@ -1,24 +1,26 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 // import { UseGlobalState } from "../../hooks/UseGlobalState";
 import Input from "../ui/input";
 import Button from "../ui/button";
-import { useDispatch,useSelector } from "react-redux";
-import { addCategory,addTransaction } from "../../redux/slices/ExpenseSlices";
+import type { Transaction, TransactionType } from "../../types/type"
+// import { useDispatch,useSelector } from "react-redux";
+import { addCategory,addTransaction } from "../../redux/slices/expenseSlices";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 function AddTransaction() {
-  const [title, setTitle] = useState("");
-  const [amount, setAmount] = useState("");
-  const [category, setCategory] = useState("غذا");
-  const [type, setType] = useState("expense");
+  const [title, setTitle] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
+  const [category, setCategory] = useState<string>("غذا");
+  const [type, setType] = useState<TransactionType>("expense");
   // const { addTransaction, addCategory, categories } = UseGlobalState();
-   const categories=useSelector((state)=>state.expense.categories)
-   const dispatch=useDispatch();
+   const categories=useAppSelector((state)=>state.expense.categories)
+   const dispatch=useAppDispatch();
   const [addingCategory, setAddingCategory] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
   
-  const generateId = () => {
-    return Math.floor(Math.random() * 1000000) + Date.now();
+  const generateId = ():string => {
+    return (Math.floor(Math.random() * 1000000) + Date.now()).toString();
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:FormEvent) => {
     e.preventDefault();
     if (!title || !amount) {
       alert("تمام موارد را کامل پر کنید!");
@@ -26,7 +28,7 @@ function AddTransaction() {
     }
     const signedAmount =
       type === "expense" ? -Math.abs(Number(amount)) : Math.abs(Number(amount));
-    const newTransaction = {
+    const newTransaction:Transaction = {
       id: generateId(),
       title,
       amount: signedAmount, 
@@ -82,7 +84,7 @@ function AddTransaction() {
             label="عنوان"
             id={"input-title"}
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e:ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
             placeholder="توضیحات تراکنش..."
           />
         </div>
@@ -93,7 +95,7 @@ function AddTransaction() {
             value={amount}
             id={"input-amount"}
             type="number"
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e:ChangeEvent<HTMLInputElement>) => setAmount(e.target.value)}
             placeholder="مبلغ به تومان..."
           />
         </div>
@@ -140,7 +142,7 @@ function AddTransaction() {
                 onChange={(e) => setCategory(e.target.value)}
                 className="flex-1 shadow border rounded py-2 px-3 text-gray-700  focus:outline-none focus:border-blue-500"
               >
-                {categories.map((cat, index) => (
+                {categories.map((cat:string, index:number) => (
                   <option key={index} value={cat}>
                     {cat}
                   </option>

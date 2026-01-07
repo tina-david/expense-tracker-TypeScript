@@ -6,7 +6,7 @@ import { FaFilter,FaSearch } from "react-icons/fa";
 import {
   setFilterCategory,
   setSearchQuery,
-} from "../../redux/slices/ExpenseSlices";
+} from "../../redux/slices/expenseSlices";
 function TransactionFilter() {
   const dispatch = useDispatch();
   const { searchQuery, filterCategory, categories } = useSelector(

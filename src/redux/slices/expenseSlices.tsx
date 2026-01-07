@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-const defaultCategories = [
+import type { PayloadAction } from "@reduxjs/toolkit";
+
+import type { Transaction, ExpenseState } from "../../types/type";
+const defaultCategories: string[] = [
   "غذا",
   "حمل و نقل",
   "قبوض",
@@ -8,12 +11,13 @@ const defaultCategories = [
   "سایر",
 ];
 
-const initialTransaction =
-  JSON.parse(localStorage.getItem("transactions")) || [];
-const initialCategories =
-  JSON.parse(localStorage.getItem("categories")) || defaultCategories;
-const initialState = {
-  transactions: initialTransaction,
+const initialTransactions: Transaction[] = JSON.parse(
+  localStorage.getItem("transactions") || "[]"
+);
+const initialCategories: string[] =
+  JSON.parse(localStorage.getItem("categories") || "null") || defaultCategories;
+const initialState: ExpenseState = {
+  transactions: initialTransactions,
   categories: initialCategories,
   searchQuery: "",
   filterCategory: "All",
@@ -23,26 +27,26 @@ const expenseSlice = createSlice({
   name: "expense",
   initialState,
   reducers: {
-    addTransaction: (state, action) => {
+    addTransaction: (state, action: PayloadAction<Transaction>) => {
       state.transactions.push(action.payload);
+      
       localStorage.setItem("transactions", JSON.stringify(state.transactions));
     },
-    deleteTransaction: (state, action) => {
+    deleteTransaction: (state, action: PayloadAction<string>) => {
       state.transactions = state.transactions.filter(
         (t) => t.id !== action.payload
-
       );
-            localStorage.setItem("transactions", JSON.stringify(state.transactions));
-
+      localStorage.setItem("transactions", JSON.stringify(state.transactions));
     },
-    addCategory: (state, action) => {
+    addCategory: (state, action: PayloadAction<string>) => {
       state.categories.push(action.payload);
+      
       localStorage.setItem("categories", JSON.stringify(state.categories));
     },
-    setSearchQuery: (state, action) => {
+    setSearchQuery: (state, action: PayloadAction<string>) => {
       state.searchQuery = action.payload;
     },
-    setFilterCategory: (state, action) => {
+    setFilterCategory: (state, action: PayloadAction<string>) => {
       state.filterCategory = action.payload;
     },
   },
@@ -53,7 +57,6 @@ export const {
   deleteTransaction,
   setSearchQuery,
   setFilterCategory,
-} = expenseSlice.actions
-
+} = expenseSlice.actions;
 
 export default expenseSlice.reducer;

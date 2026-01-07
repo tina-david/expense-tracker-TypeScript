@@ -2,7 +2,7 @@ import React from "react";
 // import { UseGlobalState } from '../../hooks/UseGlobalState';
 import { FiDelete } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteTransaction } from "../../redux/slices/ExpenseSlices";
+import { deleteTransaction } from "../../redux/slices/expenseSlices";
 function TransactionList() {
   const { transactions, searchQuery,filterCategory } = useSelector((state) => state.expense);
   const dispatch = useDispatch();
